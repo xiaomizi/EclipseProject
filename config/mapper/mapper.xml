@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- #{id}表示使用preparedstatement设置占位符号并将输入变量id传到sql parameterType：定义输入到sql中的映射类型， 
+	resultType：定义结果映射类型。 -->
+
+<!-- Mapper接口开发需要遵循以下规范： 1、 Mapper.xml文件中的namespace与mapper接口的类路径(接口名称)相同。 
+	2、 Mapper接口方法名和Mapper.xml中定义的每个statement的id相同 (所有执行的SQL操作的id名称) 3、 Mapper接口方法的输入参数类型和mapper.xml中定义的每个sql 
+	的parameterType的类型相同(接口方法中传递的参数值) 4、 Mapper接口方法的输出参数类型和mapper.xml中定义的每个sql的resultType的类型相同(接口方法中返回的值) -->
+
+<mapper namespace="com.siecom.mybaits.mapper.UserMapper">
+	<select id="getUserById" parameterType="int"
+		resultType="com.siecom.mybaits.po.User">
+		SELECT * FROM USER WHERE id=#{id}
+	</select>
+
+	<select id="getUserByName" parameterType="string"
+		resultType="com.siecom.mybaits.po.User">
+		SELECT * FROM USER WHERE username LIKE '%${value}%'
+	</select>
+
+	<insert id="insertUser" parameterType="com.siecom.mybaits.po.User">
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO USER (username,birthday,sex,address) VALUES
+		(#{username},#{birthday},#{sex},#{address})
+	</insert>
+
+	<select id="deleteUserById" parameterType="int">
+		DELETE FROM USER WHERE
+		id=#{id}
+	</select>
+
+	<select id="updateUser" parameterType="com.siecom.mybaits.po.User">
+		UPDATE USER SET
+		address=#{address} WHERE id=#{id}
+	</select>
+
+	<select id="getUserByQueryVo" parameterType="queryvo"
+		resultType="user">
+		SELECT * FROM USER WHERE id=#{user.id}
+	</select>
+
+
+	<select id="getNumOfRows" resultType="int">
+		SELECT COUNT(*) FROM USER
+	</select>
+
+	<select id="findUserList" parameterType="user" resultType="user">
+		select * from user
+		<where>
+			<if test="id!=null">
+				and id=#{id}
+			</if>
+			<if test="username!=null and username!=''">
+				and username like '%${username}%'
+			</if>
+		</where>
+
+	</select>
+	
+	<select id="findUserByIds" parameterType="QueryVo" resultType="user">
+		SELECT * FROM USER 
+		<where>
+			<foreach collection="ids" item="id" open="and id IN (" close=")" separator=",">
+				#{id}
+			</foreach>
+		</where> 
+	</select>
+</mapper>
+

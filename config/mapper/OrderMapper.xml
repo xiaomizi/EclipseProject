@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siecom.mybaits.mapper.OrderMapper">
+	<select id="getOrderList" resultType="Orders">
+		SELECT * FROM orders
+	</select>
+
+	<resultMap type="Orders" id="result_map_order_list">
+		<id property="id" column="id" />
+		<result property="userId" column="user_id" />
+		<result property="number" column="number" />
+		<result property="createtime" column="createtime" />
+		<result property="note" column="note" />
+	</resultMap>
+	<select id="getOrderListResultMap" resultMap="result_map_order_list">
+		SELECT * FROM
+		orders
+	</select>
+
+	<select id="getOrderUserListResultType" resultType="OrderUser">
+		SELECT
+		o.id,
+		o.user_id userId,
+		o.number,
+		o.createtime,
+		o.note,
+		u.username,
+		u.address 
+		FROM orders o LEFT JOIN USER u 
+		ON o.user_id=u.id
+	</select>
+	
+	
+	<resultMap type="com.siecom.mybaits.po.Orders" id="get_order_user_list_result_map">
+		<id property="id" column="id"/>
+		<result property="userId" column="user_id"/>
+		<result property="number" column="number"/>
+		<result property="createtime" column="createtime"/>
+		<result property="note" column="note"/>
+		<association property="user" javaType="com.siecom.mybaits.po.User">
+			<id property="id" column="id"/>
+			<result property="username" column="username"/>
+			<result property="address" column="address"/>
+		</association>
+	</resultMap>
+	<select id="getOrderUserListResultMap" resultMap="get_order_user_list_result_map">
+		SELECT
+		o.id,
+		o.user_id userId,
+		o.number,
+		o.createtime,
+		o.note,
+		u.username,
+		u.address 
+		FROM orders o LEFT JOIN USER u 
+		ON o.user_id=u.id
+	</select>
+	
+	<resultMap type="com.siecom.mybaits.po.User" id="get_user_order__list_result_map">
+		<id property="id" column="id"/>
+		<result property="username" column="username"/>
+		<result property="birthday" column="birthday"/>
+		<result property="sex" column="sex"/>
+		<result property="address" column="address"/>
+		<collection property="orders" ofType="com.siecom.mybaits.po.Orders">
+			<id property="id" column="id"/>
+			<result property="number" column="number"/>
+			<result property="createtime" column="createtime"/>
+			<result property="note" column="note"/>
+		</collection>
+	</resultMap>
+	<select id="getUserOrdersResultMap" resultMap="get_user_order__list_result_map">
+		SELECT u.id,u.username,u.birthday,u.sex,u.address ,o.id,o.number,o.createtime,o.note FROM USER u LEFT JOIN orders o ON u.id=o.user_id
+	</select>
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- #{id}表示使用preparedstatement设置占位符号并将输入变量id传到sql
+parameterType：定义输入到sql中的映射类型，
+resultType：定义结果映射类型。 -->
+
+<mapper namespace="test">
+	<select id="getUserById" parameterType="int" resultType="com.siecom.mybaits.po.User">
+		SELECT * FROM USER WHERE id=#{id}
+	</select>
+	
+	<select id="getUserByName" parameterType="string" resultType="com.siecom.mybaits.po.User">
+		SELECT * FROM USER WHERE username LIKE '%${value}%'
+	</select>
+	
+	<insert id="addUser" parameterType="com.siecom.mybaits.po.User">
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO USER (username,birthday,sex,address) VALUES 
+		(#{username},#{birthday},#{sex},#{address})
+	</insert>
+	
+	<select id="deleteUserById" parameterType="int">
+		DELETE FROM USER WHERE id=#{id}
+	</select>
+	
+	<select id="updateUser" parameterType="com.siecom.mybaits.po.User">
+		UPDATE USER SET address=#{address} WHERE id=#{id}
+	</select>
+</mapper>
+

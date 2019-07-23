@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties resource="db.properties">
+		<property name="jdbc.driver" value="com.mysql.jdbc.Driver"/>
+		<property name="jdbc.url" value="jdbc:mysql://localhost:3306/mybatis?characterEncoding=utf-8"/>
+	</properties>
+	
+	<typeAliases>
+		<!-- <typeAlias type="user" alias="com.siecom.mybaits.po.User"/> -->
+		<!-- 扫描包的形式创建别名，不区分大小写 -->
+		<package name="com.siecom.mybaits.po"/>
+	</typeAliases>
+
+	<!-- 和spring整合后 environments配置将废除-->
+	<environments default="development">
+		<environment id="development">
+		<!-- 使用jdbc事务管理-->
+			<transactionManager type="JDBC" />
+		<!-- 数据库连接池-->
+			<dataSource type="POOLED">
+				<property name="driver" value="${jdbc.driver}" />
+				<property name="url" value="${jdbc.url}" />
+				<property name="username" value="${jdbc.username}" />
+				<property name="password" value="${jdbc.password}" />
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<mappers>
+		<mapper resource="sqlmap/Users.xml"/>
+		<mapper resource="mapper/mapper.xml"/>
+		<mapper resource="mapper/OrderMapper.xml"/>
+	</mappers>
+	
+</configuration>

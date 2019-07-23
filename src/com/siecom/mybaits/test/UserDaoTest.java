@@ -49,6 +49,7 @@ public class UserDaoTest {
 
 	@Test
 	public void testInsertUser() {
+		System.out.println("hot_fix");
 		UserDao userDao=new UserDaoImpl(sqlSessionFactory);
 		User user=new User();
 		user.setUsername("桔梗");
